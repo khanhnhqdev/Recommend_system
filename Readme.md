@@ -1,5 +1,6 @@
 # Recommend System
-## 1. Data: the dataset use in this code is movie len 100k
+## 1. Data:   
+The dataset use in this code is movie len 100k
 ## 2. Algorithms to implement in this project includes:
 Content-base  
 Collaborative filtering:  
