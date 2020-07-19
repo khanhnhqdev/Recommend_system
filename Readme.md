@@ -6,7 +6,7 @@ Content-base
 Collaborative filtering:  
     - Neiborhood base: user-user and item-item  
     - Model base: 
-    + Collaborative Filtering Approach Based on Naïve Bayes Classifier 
+    + Collaborative Filtering Approach Based on Naïve Bayes Classifier  
     + Regression based: Matrix Factorization
 
 ## 3. Code:
