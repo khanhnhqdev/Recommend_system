@@ -5,27 +5,43 @@ lowest score:  1
 train_shape:  (90570, 4)
 test_shape:  (9430, 4)
 
-Content base: 
+1. Content based: 
 RMSE:  1.2703282700393048
-mean_average_precision:  0.802076131352072
-normalized discounted cumulative gain:  0.85256505
+mean_average_precision:  0.8020059968748681
+normalized discounted cumulative gain:  0.85193723
 
-Collaborative filtering
+2. Collaborative filtering
 
-User-base: 
+2.1 Memory based:
+
+a. User-base: 
 RMSE:  0.9767347622900232
-mean_average_precision:  0.8550109198626873
-normalized discounted cumulative gain:  0.8920801
+mean_average_precision:  0.8558406182693525
+normalized discounted cumulative gain:  0.8925725
 
-Item-base: 
+b. Item-base: 
 RMSE:  0.9678464362651048
-mean_average_precision:  0.8664793397404572
-normalized discounted cumulative gain:  0.9005865
+mean_average_precision:  0.8669263904725706
+normalized discounted cumulative gain:  0.90070266
 
-None
-Naive bayes base: 
+2.2 Naive bayes base: 
 RMSE:  1.2307908983328062
-mean_average_precision:  0.9163815034016478
-normalized discounted cumulative gain:  0.9377499
+mean_average_precision:  0.9167490181173191
+normalized discounted cumulative gain:  0.9376867
 
+2.3 Matrix Factorization: 
+
+iter = 100 , loss = 21.343013201531946 , RMSE train = 2.2627429624603717
+iter = 200 , loss = 17.76239528306678 , RMSE train = 2.129757138560567
+iter = 300 , loss = 15.051074515165649 , RMSE train = 1.984685873348104
+iter = 400 , loss = 12.947577035427296 , RMSE train = 1.8320505940205993
+iter = 500 , loss = 11.276324389858779 , RMSE train = 1.6809644660974457
+iter = 600 , loss = 9.918380763316664 , RMSE train = 1.5411115269459017
+iter = 700 , loss = 8.792380421937796 , RMSE train = 1.420071996269438
+iter = 800 , loss = 7.842019795855916 , RMSE train = 1.3204441384090975
+iter = 900 , loss = 7.02781291133817 , RMSE train = 1.2411903833860765
+iter = 1000 , loss = 6.321632164657881 , RMSE train = 1.1803416545567074
+RMSE:  1.1985925372711754
+mean_average_precision:  0.7601587904894631
+normalized discounted cumulative gain:  0.81989086
 

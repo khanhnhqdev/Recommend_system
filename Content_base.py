@@ -9,7 +9,7 @@ from sklearn.linear_model import Ridge
 from sklearn import linear_model
 
 class Content_base:
-    """docstring for CF"""
+    """docstring for Content_base"""
     def __init__(self, 
                 Y_data, 
                 Y_test, 
@@ -18,7 +18,7 @@ class Content_base:
                 num_recommend = 20, 
                 ):
         '''
-        initialize parameter for collaborative_filtering algorith
+        initialize parameter for algorithm
         n_users, n_items: number of user and item
         self.mu: array contains the average ratings point of all user, mu[i] is mean point of user i
         Ybar_data: data after convert to sparse matrix
@@ -104,4 +104,18 @@ class Content_base:
 
         return predict_list
         
-    
+    def pred_for_user(self, user_id):
+        """
+        return list of recommend for each user on unrated item of that user
+        """
+        ids = np.where(self.Y_data[:, 0] == user_id)[0]
+        items_rated_by_u = self.Y_data[ids, 1].tolist()              
+        
+        recommend_item = []
+        for i in items_rated_by_u:
+            rate_of_user_u_for_item_i = self.predict_ratings[i, user_id]
+            recommend_item.append((rate_of_user_u_for_item_i, i))
+        
+        recommend_item.sort(key = lambda x : x[0], reverse=True)
+
+        return [x[1] for x in recommend_item[: self.num_recommend]]

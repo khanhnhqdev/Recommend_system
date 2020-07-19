@@ -191,4 +191,19 @@ class CF:
 
         return predict_list
         
-    
+    def pred_for_user(self, user_id):
+        """
+        return list of recommend for each user on unrated item of that user
+        """
+        ids = np.where(self.Y_data[:, 0] == user_id)[0]
+        items_rated_by_u = self.Y_data[ids, 1].tolist()              
+        
+        recommend_item = []
+        for i in items_rated_by_u:
+            rate_of_user_u_for_item_i = self.pred(user_id, i)
+            recommend_item.append((rate_of_user_u_for_item_i, i))
+        
+        recommend_item.sort(key = lambda x : x[0], reverse=True)
+        
+        return [x[1] for x in recommend_item[: self.num_recommend]]
+

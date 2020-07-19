@@ -4,11 +4,15 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from Naive_bayes import *
+from Matrix_Factorization import *
 import sys
+import os
 
 ## Write all result to output.txt file
-f = open('output.txt','w')
-sys.stdout = f
+# f = open('output.txt','w')
+# sys.stdout = f
+
+
 ### Load data for ml-20m
 # ratings = pd.read_csv('./Datasets/ml-20m/ratings.csv') # sep='\t', encoding='latin-1')
 
@@ -37,7 +41,7 @@ num_user = int(np.max(rate_train.values[:, 0]))
 num_item = int(np.max(rate_train.values[:, 1]))
 high = int(np.max(rate_train.values[:, 2]))
 low = int(np.min(rate_train.values[:, 2]))
-
+ 
 print('number of user: ', num_user)
 print('number of items: ', num_item)
 print('highest score: ', high)
@@ -91,13 +95,13 @@ flat_list = [[i] for i in flat_list]
 # print(len(flat_list))
 ###############################################################
 
-## Content-base:
+# 1. Content-base:
 
 Content_base = Content_base(Y_data = rate_train,
                             Y_test = rate_test,
                             true_list_for_each_user = true_list_for_each_user,
                             hate_list_for_each_user = hate_list_for_each_user, 
-                            num_recommend = 10
+                            num_recommend = 5
                            )
 # Content_base.build_item_profile()
 
@@ -110,7 +114,7 @@ for n in range(n_tests):
     SE += (pred - rate_test[n, 2])**2 
 
 print()
-print('Content base: ')
+print('1. Content based: ')
 RMSE = np.sqrt(SE / n_tests)
 print('RMSE: ', RMSE)
 
@@ -122,7 +126,9 @@ print('normalized discounted cumulative gain: ', ndcg)
 print()
 
 # ##  Collaborative filtering:
-print('Collaborative filtering')
+print('2. Collaborative filtering')
+print()
+print('2.1 Memory based:')
 print()
 # 1. User base
 
@@ -134,7 +140,7 @@ rs_user = CF(Y_data = rate_train,
         uuCF = 1, 
         true_list_for_each_user = true_list_for_each_user, 
         hate_list_for_each_user = hate_list_for_each_user, 
-        num_recommend = 10)
+        num_recommend = 5)
 rs_user.fit()
 n_tests = rate_test.shape[0]
 SE = 0 
@@ -142,7 +148,7 @@ for n in range(n_tests):
     pred = rs_user.pred(rate_test[n, 0], rate_test[n, 1], normalized = 0)
     SE += (pred - rate_test[n, 2])**2 
 
-print('User-base: ')
+print('a. User-base: ')
 RMSE = np.sqrt(SE / n_tests)
 print('RMSE: ', RMSE)
 
@@ -163,7 +169,7 @@ rs_item = CF(Y_data = rate_train,
         uuCF = 0,
         true_list_for_each_user = true_list_for_each_user,
         hate_list_for_each_user = hate_list_for_each_user,
-        num_recommend = 10)
+        num_recommend = 5)
 rs_item.fit()
 n_tests = rate_test.shape[0]
 SE = 0 
@@ -171,13 +177,11 @@ for n in range(n_tests):
     pred = rs_item.pred(rate_test[n, 0], rate_test[n, 1], normalized = 0)
     SE += (pred - rate_test[n, 2])**2 
 
-print('Item-base: ')
+print('b. Item-base: ')
 RMSE = np.sqrt(SE / n_tests)
 print('RMSE: ', RMSE)
 
 predict_list = rs_item.recommend_list_of_each_user()
-# print(predict_list[:5])
-# print(flat_list[:5])
 print('mean_average_precision: ', mean_average_precision(predict_list, flat_list)) 
 
 ndcg = ndcg_at(predict_list, flat_list, k = 10)
@@ -190,7 +194,7 @@ Naive_bayes = Naive_bayes(Y_data = rate_train,
                             Y_test = rate_test,
                             true_list_for_each_user = true_list_for_each_user,
                             hate_list_for_each_user = hate_list_for_each_user, 
-                            num_recommend = 10
+                            num_recommend = 5
                            )
 
 Naive_bayes.fit()
@@ -201,18 +205,83 @@ for n in range(n_tests):
     pred = Naive_bayes.pred(rate_test[n, 0], rate_test[n, 1])
     SE += (pred - rate_test[n, 2])**2 
 
-print('Naive bayes base: ')
+print('2.2 Naive bayes base: ')
 RMSE = np.sqrt(SE / n_tests)
 print('RMSE: ', RMSE)
 
 predict_list = Naive_bayes.recommend_list_of_each_user()
-# print(predict_list[:5])
-# print(flat_list[:5])
 print('mean_average_precision: ', mean_average_precision(predict_list, flat_list)) 
 
 ndcg = ndcg_at(predict_list, flat_list, k = 10)
 print('normalized discounted cumulative gain: ', ndcg)
 print()
 
-
+# 4. Matrix Factorization
+print('2.3 Matrix Factorization: ')
 print()
+MF = MF(Y_data = rate_train,
+        true_list_for_each_user = true_list_for_each_user,
+        hate_list_for_each_user = hate_list_for_each_user, 
+        num_recommend = 5,
+        K = 20
+        )
+
+MF.fit()
+
+n_tests = rate_test.shape[0]
+SE = 0 
+for n in range(n_tests):
+    pred = MF.pred(rate_test[n, 0], rate_test[n, 1])
+    SE += (pred - rate_test[n, 2])**2 
+
+RMSE = np.sqrt(SE / n_tests)
+print('RMSE: ', RMSE)
+
+predict_list = MF.recommend_list_of_each_user()
+print('mean_average_precision: ', mean_average_precision(predict_list, flat_list)) 
+
+ndcg = ndcg_at(predict_list, flat_list, k = 10)
+print('normalized discounted cumulative gain: ', ndcg)
+print()
+
+### Use terminal to print the list predict of user:
+# f.close()
+hi = input('Start : ')
+while True:
+    os.system('clear')
+    print('Choose model to predict')
+    print('1: Content based:') 
+    print('2: Neiborhood based: user-user:')
+    print('3: Neiborhood based: item-item:')
+    print('4: Naive bayes based:') 
+    print('5: Matrix Factorization:')
+    print('6: Exit')
+    
+    num = input('Enter choosen model: ')
+    
+    if num == '1':
+        model = Content_base
+    elif num == '2':
+        model = rs_user
+    elif num == '3':
+        model = rs_item
+    elif num == '4':
+        model = Naive_bayes
+    elif num == '5':
+        model = MF
+    else:
+        break
+    
+    while(True):
+        
+        user_id = input('Enter user_id: ')
+
+        if user_id.isnumeric() == False:
+            break
+        user_id = int(user_id)
+        recommend_list = model.pred_for_user(user_id)
+        print('Recommend list of user ',user_id, ': ',recommend_list)
+        print()
+
+  
+

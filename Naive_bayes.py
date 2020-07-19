@@ -11,7 +11,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 class Naive_bayes:
-    """docstring for CF"""
+    """docstring for Naive_bayes"""
     def __init__(self, 
                 Y_data, 
                 Y_test, 
@@ -48,8 +48,6 @@ class Naive_bayes:
     
         # Create input(tf-idf vector) and output for Muitinomial Naive Bayes
         inputs = vectorizer.fit_transform(data)
-        # print(len(vectorizer.get_feature_names()))
-        print(vectorizer.vocabulary_.get('0'))
         outputs = self.Y_data[:, 2]
         # print(inputs)
         # print(inputs.shape)
@@ -106,4 +104,19 @@ class Naive_bayes:
 
         return predict_list
         
-   
+    def pred_for_user(self, user_id):
+        """
+        return list of recommend for each user on unrated item of that user
+        """
+        ids = np.where(self.Y_data[:, 0] == user_id)[0]
+        items_rated_by_u = self.Y_data[ids, 1].tolist()              
+        
+        recommend_item = []
+        for i in items_rated_by_u:
+            rate_of_user_u_for_item_i = self.pred(user_id, i)
+            recommend_item.append((rate_of_user_u_for_item_i, i))
+        
+        recommend_item.sort(key = lambda x : x[0], reverse=True)
+
+        return [x[1] for x in recommend_item[: self.num_recommend]]
+
