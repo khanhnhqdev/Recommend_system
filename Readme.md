@@ -8,8 +8,7 @@ Collaborative filtering:
 
 3. Code:
 To run code: 
-    + Download dataset movie len 100k and put it in folder './Datasets'
-    + python 
-    '''
-    main.py
-    '''
+ 
+    """
+    python main.py
+    """
