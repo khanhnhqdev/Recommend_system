@@ -7,4 +7,9 @@ Collaborative filtering:
     + Model base: Naive bayes based
 
 3. Code:
-To run code: python main.py
+To run code: 
+    + Download dataset movie len 100k and put it in folder './Datasets'
+    + python 
+    '''
+    main.py
+    '''
