@@ -8,7 +8,6 @@ Collaborative filtering:
 
 ## 3. Code:
 To run code: 
- 
-    ```
-    python main.py
-    ```
+```
+python main.py
+```
