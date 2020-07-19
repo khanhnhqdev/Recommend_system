@@ -9,7 +9,10 @@ The dataset use in this code is movie len 100k
         + Collaborative Filtering Approach Based on Naïve Bayes Classifier  
         + Regression based: Matrix Factorization
 
-## III. Code:
+## III. Evaluation:
+The system is evaluated by three criteria: RMSE, MAP(mean average precision) and NDCG(normalized discounted cumulative gain).  
+ll the results are recorded in output.txt file.  
+## IV. Code:
 To run code: 
 ```
 python main.py
